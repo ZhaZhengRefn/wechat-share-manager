@@ -1,5 +1,5 @@
-const wx = require('weixin-js-sdk')
-const Event = require('./lib/event-emitter')
+import wx from 'weixin-js-sdk'
+import Event from './lib/event-emitter'
 
 const HAS_RUN_DEFAULT_SHARE = 'hasRunDefaultShare-'
 // notice: 事件中心有个特性。在监听事件之前触发事件，事件中心会先缓存这个事件，并在监听的时候以触发时的参数立即触发。
