@@ -1,6 +1,6 @@
 {
   "name": "wechat-share-manager",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "管理微信全局默认分享与局部页面自定义分享",
   "main": "./dist/index.js",
   "scripts": {
