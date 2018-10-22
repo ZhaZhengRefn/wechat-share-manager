@@ -51,14 +51,20 @@ class Share {
 
     // 挂载全局方法$initShare，传入自定义分享配置
     // 用于在每页初始化默认分享后再覆盖自定义分享
-    this._Vue.prototype.$initShare = function(config) {
-      _self.customConfig = format(config)
-      event.on(HAS_RUN_DEFAULT_SHARE + _self._uid, () => {
-        wx.ready(() => {
-          wx.onMenuShareAppMessage(_self.customConfig)
-          wx.onMenuShareTimeline(_self.customConfig)
-        })        
-      })
+    this._Vue.prototype.$initShare = function(arg) {
+      let callback = () => {}
+      if (Object.prototype.toString.call(arg) === '[object Object]') {
+        _self.customConfig = format(arg)
+        callback = () => {
+          wx.ready(() => {
+            wx.onMenuShareAppMessage(_self.customConfig)
+            wx.onMenuShareTimeline(_self.customConfig)
+          })
+        }        
+      } else if(typeof arg === 'function') {
+        callback = arg
+      }
+      event.on(HAS_RUN_DEFAULT_SHARE + _self._uid, callback.call(_self))
     }
   }
 
