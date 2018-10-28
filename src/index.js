@@ -40,7 +40,7 @@ const format = function(config) {
 }
 
 class Share {
-  constructor(Vue, router) {
+  constructor(Vue, router, options = {}) {
     let _self = this
 
     this.defaultConfig = null
@@ -48,6 +48,7 @@ class Share {
     this._Vue = Vue
     this.router = router
     this._uid = 0
+    this._isDebug = options.isDebug || false
 
     // 挂载全局方法$initShare，传入自定义分享配置
     // 用于在每页初始化默认分享后再覆盖自定义分享
@@ -64,7 +65,8 @@ class Share {
       } else if(typeof arg === 'function') {
         callback = arg
       }
-      event.on(HAS_RUN_DEFAULT_SHARE + _self._uid, callback.call(_self))
+      self._isDebug && console.log(`on uid: `, _self._uid)
+      event.on(HAS_RUN_DEFAULT_SHARE + _self._uid, callback)
     }
   }
 
@@ -99,6 +101,7 @@ class Share {
     }    
     const markAsRan = uid => {
       return new Promise((resolve, reject) => {
+        self._isDebug && console.log(`emit uid:`, uid);
         event.emit(HAS_RUN_DEFAULT_SHARE + uid)
       })
     }
