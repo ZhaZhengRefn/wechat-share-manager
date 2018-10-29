@@ -1,35 +1,12 @@
-const babel = require('rollup-plugin-babel')
-const replace = require('rollup-plugin-replace')
-const minify = require('rollup-plugin-babel-minify')
-const rollupTypescript = require('rollup-plugin-typescript')
-const typescript = require('typescript');
 const rollup = require('rollup')
-const version = process.env.VERSION || require('../package.json').version
-
-const inputOptions = {
-  input: 'src/index.js',
-  plugins: [
-    replace({
-      [`process.env.NODE_ENV`]: process.env.NODE_ENV,
-      __VERSION__: version,
-    }),
-    rollupTypescript({
-      typescript,
-    }),
-    // babel({
-    //   exclude: 'node_modules/**',
-    // }),
-    minify(),
-  ]
-}
-
-const outputOptions = {
-  name: 'WechatShare',
-  file: './dist/index.js',
-  format: 'umd',
-}
+const nodeEnv = process.env.NODE_ENV || 'development'
+const conf = nodeEnv === 'development' ? require('../build/dev.conf') : require('../build/prod.conf')
 
 const build = async function() {
+  const {
+    inputOptions,
+    outputOptions,
+  } = conf
   const bundle = await rollup.rollup(inputOptions)
 
   const {
@@ -40,4 +17,32 @@ const build = async function() {
   await bundle.write(outputOptions)
 }
 
-build()
+const watch = async function() {
+  const {
+    inputOptions,
+    outputOptions,
+  } = conf  
+  const watchOptions = {
+    ...inputOptions,
+    output: [outputOptions],
+    watch: {
+      include: './src/**',
+    }    
+  };
+  const watcher = rollup.watch(watchOptions);
+  
+  watcher.on('event', event => {
+    // event.code can be one of:
+    //   START        — the watcher is (re)starting
+    //   BUNDLE_START — building an individual bundle
+    //   BUNDLE_END   — finished building a bundle
+    //   END          — finished building all bundles
+    //   ERROR        — encountered an error while bundling
+    //   FATAL        — encountered an unrecoverable error
+  });
+  
+  // stop watching
+  // watcher.close();
+}
+
+nodeEnv === 'development' ? watch() : build()

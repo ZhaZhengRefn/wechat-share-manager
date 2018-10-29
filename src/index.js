@@ -127,4 +127,4 @@ class Share {
   }
 }
 
-module.exports = Share
+export default Share
