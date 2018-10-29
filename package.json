@@ -5,7 +5,7 @@
   "main": "./dist/index.js",
   "scripts": {
     "build": "NODE_ENV=production node ./scripts/build.js",
-    "compile": "tsc -w",
+    "compile": "tsc -w --noEmit",
     "dev": "NODE_ENV=development node ./scripts/build.js",
     "lint": "tslint -c tslint.json -t codeFrame \"src/**/*.ts\"",
     "deploy": "node ./scripts/deploy.js"
