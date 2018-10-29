@@ -29,7 +29,7 @@ const watch = async function() {
       include: './src/**',
     }    
   };
-  const watcher = rollup.watch(watchOptions);
+  const watcher = await rollup.watch(watchOptions);
   
   watcher.on('event', event => {
     // event.code can be one of:
