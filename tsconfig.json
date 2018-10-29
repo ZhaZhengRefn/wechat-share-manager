@@ -11,5 +11,6 @@
     "scripts",
     "**/*.spec.ts"
   ],
-  "allowSyntheticDefaultImports": true
+  "allowSyntheticDefaultImports": true,
+  "strictNullCheck": true
 }
