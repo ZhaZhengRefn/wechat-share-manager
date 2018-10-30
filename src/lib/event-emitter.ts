@@ -1,6 +1,6 @@
 type Args = any[];
 type Func = () => any;
-interface InterfaceEvent {
+export interface InterfaceEvent {
   on(type: string, fn: Func): void;
   emit(type: string, ...args: Args): void;
 }
