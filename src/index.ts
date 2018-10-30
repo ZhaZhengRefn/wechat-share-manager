@@ -44,7 +44,8 @@ const checkKey: CheckKey =
 
 // 格式化参数包，过滤无用参数并校验
 const format: Format = (config: InterfaceConfig): InterfaceConfig => {
-  if (process.env.NODE_ENV !== 'production') {
+  const nodeEnv: string = process.env.NODE_ENV || 'production';
+  if (nodeEnv !== 'production') {
     const c: boolean = checkKey('title, link, imgUrl, desc', config);
     if (!c) {
       warning(`default-config should contains these keys: ` + 'title, link, imgUrl, desc');

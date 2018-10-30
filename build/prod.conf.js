@@ -12,12 +12,12 @@ const prodConf = {
   inputOptions: {
     input: 'src/index.ts',
     plugins: [
+      // replace({
+      //   [`process.env.NODE_ENV`]: `'${process.env.NODE_ENV}'`,
+      //   __VERSION__: version,
+      // }),      
       rollupTs({
         typescript,
-      }),
-      replace({
-        [`process.env.NODE_ENV`]: process.env.NODE_ENV,
-        __VERSION__: version,
       }),
       nodeResolve(),
       commonjs({

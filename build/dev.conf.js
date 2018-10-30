@@ -17,7 +17,7 @@ const devConf = {
         typescript,
       }),
       replace({
-        [`process.env.NODE_ENV`]: process.env.NODE_ENV,
+        [`process.env.NODE_ENV`]: `${process.env.NODE_ENV}`,
         __VERSION__: version,
       }),      
       nodeResolve(),

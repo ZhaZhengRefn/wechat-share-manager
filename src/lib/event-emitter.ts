@@ -32,7 +32,7 @@ export default class Event implements InterfaceEvent {
     }
     // 订阅事件
     let events: Func[] = this.events[type];
-    if (Array.isArray(events)) {
+    if (!Array.isArray(events)) {
       events = [];
     }
     events.push(fn);
