@@ -7,6 +7,7 @@
     "rules": {
         "no-empty": false,
         "no-console": false,
+        "interface-name": false,
         "quotemark": [true, "single"],
         "indent": [true, "spaces", 2],
         "ordered-imports": false,

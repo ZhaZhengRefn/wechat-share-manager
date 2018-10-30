@@ -3,7 +3,7 @@ declare global {
     wx: InterfaceWechat;
   }
 }
-import Event from './lib/event-emitter';
+import Event, { InterfaceEvent } from './lib/event-emitter';
 
 type Warning = (msg: string) => void;
 type HasProp = (target: object, property: string) => boolean;
@@ -71,6 +71,7 @@ export default class Share implements InterfaceShare {
   private uid: number;
   private isDebug: boolean;
   private wx: InterfaceWechat;
+  private event: InterfaceEvent;
 
   constructor(Vue, router, wx, options: { isDebug?: boolean } = {}) {
     const self = this;
@@ -80,6 +81,7 @@ export default class Share implements InterfaceShare {
     this.uid = 0;
     this.isDebug = options.isDebug || false;
     this.wx = wx || window.wx;
+    this.event = event;
 
     // 挂载全局方法$initShare，传入自定义分享配置 或 回调函数
     // 用于在每页初始化默认分享后再覆盖自定义分享
