@@ -2,27 +2,28 @@ const babel = require('rollup-plugin-babel')
 const replace = require('rollup-plugin-replace')
 const serve = require('rollup-plugin-serve')
 const livereload = require('rollup-plugin-livereload')
-const typescript = require('rollup-plugin-typescript')
+const rollupTs = require('rollup-plugin-typescript')
+const typescript = require('typescript')
+const commonjs = require('rollup-plugin-commonjs')
+const nodeResolve = require('rollup-plugin-node-resolve')
 const rollup = require('rollup')
 const version = process.env.VERSION || require('../package.json').version
 
 const devConf = {
   inputOptions: {
-    // TODO: typescript entry
     input: 'src/index.ts',
-    // input: 'src/index.js',
     plugins: [
+      rollupTs({
+        typescript,
+      }),
       replace({
         [`process.env.NODE_ENV`]: process.env.NODE_ENV,
         __VERSION__: version,
-      }),
-      // babel({
-      //   exclude: 'node_modules/**',
-      // }),
-      // TODO: typescript plugins
-      typescript({
-        typescript: require('typescript'),
-      }),
+      }),      
+      nodeResolve(),
+      commonjs({
+        include: 'node_modules/weixin-js-sdk/**',
+      }),       
       serve({
         contentBase: './example/',
         port: 3335,

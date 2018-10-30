@@ -3,6 +3,16 @@
   "strict": true,
   "module": "es2015",
   "moduleResolution": "node",
+  "compilerOptions": {
+    "lib": [
+        "dom",
+        "es2015",
+        "scripthost",
+        "es2015.promise"
+    ],
+    "allowSyntheticDefaultImports": true,
+    "strictNullChecks": true    
+  },  
   "include": [
     "src/**/*.ts"
   ],
@@ -10,7 +20,5 @@
     "node_modules",
     "scripts",
     "**/*.spec.ts"
-  ],
-  "allowSyntheticDefaultImports": true,
-  "strictNullCheck": true
+  ]
 }

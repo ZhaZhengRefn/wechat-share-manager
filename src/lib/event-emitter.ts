@@ -4,13 +4,13 @@ interface InterfaceEvent {
   on(type: string, fn: Func): void;
   emit(type: string, ...args: Args): void;
 }
-interface FunctionMap {
+interface InterfaceFunctionMap {
   [prop: string]: [];
 }
 
 export default class Event implements InterfaceEvent {
-  private events: FunctionMap;
-  private stack: FunctionMap;
+  private events: InterfaceFunctionMap;
+  private stack: InterfaceFunctionMap;
 
   constructor() {
     this.events = {};
