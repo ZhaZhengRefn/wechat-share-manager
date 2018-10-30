@@ -1,8 +1,9 @@
+type Args = any[];
+type Func = () => any;
 interface InterfaceEvent {
-  on(type: string, fn: () => any): void;
-  emit(type: string, ...args: any[]): void;
+  on(type: string, fn: Func): void;
+  emit(type: string, ...args: Args): void;
 }
-
 interface FunctionMap {
   [prop: string]: [];
 }
@@ -16,12 +17,11 @@ export default class Event implements InterfaceEvent {
     this.stack = {};
   }
 
-  public on(type: string, fn: () => any): void {
+  public on(type: string, fn: Func): void {
     // 立即触发已被emit的事件
-    const stack: any[] = this.stack[type];
+    const stack: Args[] = this.stack[type];
     if (Array.isArray(stack)) {
-      const remains = stack;
-      remains.forEach((args: any[]) => {
+      stack.forEach((args: Args) => {
         try {
           fn.call(this, ...args);
         } catch (error) {
@@ -31,16 +31,16 @@ export default class Event implements InterfaceEvent {
       delete this.stack[type];
     }
     // 订阅事件
-    let events: Array<() => any> = this.events[type];
+    let events: Func[] = this.events[type];
     if (Array.isArray(events)) {
       events = [];
     }
     events.push(fn);
   }
 
-  public emit(type: string, ...args: any[]): void {
+  public emit(type: string, ...args: Args): void {
     if (!Array.isArray(this.events[type])) {
-      let stack: any[][] = this.stack[type];
+      let stack: Args[] = this.stack[type];
       if (!Array.isArray(this.stack[type])) {
         stack = [];
       }
@@ -48,8 +48,8 @@ export default class Event implements InterfaceEvent {
       return;
     }
     // 触发事件回调
-    const fns: Array<() => any> = this.events[type];
-    fns.forEach((fn: () => any) => {
+    const fns: Func[] = this.events[type];
+    fns.forEach((fn: Func) => {
       try {
         fn.call(this, ...args);
       } catch (error) {
