@@ -1,4 +1,3 @@
-import wx from 'weixin-js-sdk';
 import Event from './lib/event-emitter';
 
 type Warning = (msg: string) => void;
@@ -17,6 +16,11 @@ interface InterfaceShare {
 }
 interface InterfaceRouter {
   beforeEach(thunk: ((to: object, from: object, next: (() => any)) => any));
+}
+interface InterfaceWechat {
+  ready(callback: () => any): void;
+  onMenuShareAppMessage(config: InterfaceConfig): void;
+  onMenuShareTimeline(config: InterfaceConfig): void;
 }
 
 // 简单工具函数
@@ -61,14 +65,16 @@ export default class Share implements InterfaceShare {
   private router: object;
   private uid: number;
   private isDebug: boolean;
+  private wx: InterfaceWechat;
 
-  constructor(Vue, router, options: { isDebug?: boolean } = {}) {
+  constructor(Vue, router, wx, options: { isDebug?: boolean } = {}) {
     const self = this;
     this.defaultConfig = null;
     this.customConfig = null;
     this.router = router;
     this.uid = 0;
     this.isDebug = options.isDebug || false;
+    this.wx = wx;
 
     // 挂载全局方法$initShare，传入自定义分享配置 或 回调函数
     // 用于在每页初始化默认分享后再覆盖自定义分享
@@ -79,9 +85,9 @@ export default class Share implements InterfaceShare {
       if (Object.prototype.toString.call(arg) === '[object Object]') {
         self.customConfig = format(arg);
         callback = () => {
-          wx.ready(() => {
-            wx.onMenuShareAppMessage(self.customConfig);
-            wx.onMenuShareTimeline(self.customConfig);
+          self.wx.ready(() => {
+            self.wx.onMenuShareAppMessage((self.customConfig as InterfaceConfig));
+            self.wx.onMenuShareTimeline((self.customConfig as InterfaceConfig));
           });
         };
       } else if (typeof arg === 'function') {
@@ -111,9 +117,9 @@ export default class Share implements InterfaceShare {
 
     const runDefaultShare: (conf: InterfaceConfig) => Promise<void> =
       (conf: InterfaceConfig) => new Promise((resolve, reject) => {
-        wx.ready(() => {
-          wx.onMenuShareAppMessage(conf);
-          wx.onMenuShareTimeline(conf);
+        this.wx.ready(() => {
+          this.wx.onMenuShareAppMessage(conf);
+          this.wx.onMenuShareTimeline(conf);
           resolve();
         });
       });

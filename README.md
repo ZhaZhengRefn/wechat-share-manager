@@ -14,8 +14,17 @@ yarn add wechat-share-manager
 
 ```js
 // 初始化js-sdk后，在入口文件处初始化默认分享
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+// 引入weixin-js-sdk或者通过script标签全局引入
+import wx from 'weixin-js-sdk'
+// ...初始化router
+const router = new VueRouter([{
+  name: 'index',
+  path: '/index',
+}])
 import Share from 'wechat-share-manager'
-const share = new Share(Vue, router)
+const share = new Share(Vue, router, wx)
 share.init({
   title: 'foo',
   desc: 'bar',
@@ -37,4 +46,16 @@ mounted() {
   })
 }
 // ...
+```
+
+```js
+// 也可以传入回调函数，自定义分享流程
+mounted() {
+  this.$initShare(() => {
+    wx.ready(() => {
+      wx.onMenuShareTimeline(timeLineShareConfigObj);
+      wx.onMenuShareAppMessage(AppMessageShareConfigObj);
+    });    
+  })  
+}
 ```
