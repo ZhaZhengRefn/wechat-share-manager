@@ -21,7 +21,19 @@
     var router = new VueRouter({
       routes
     })    
-    window.share = new WechatShare(Vue, router)
+    window.share = new WechatShare(Vue, router, wx, { isDebug: true })
+    share.init({
+      title: 'foo',
+      desc: 'bar',
+      imgUrl: 'http://via.placeholder.com/350x350',
+      link: 'https://github.com/ZhaZhengRefn/wechat-share-manager',      
+    })
+    Vue.prototype.$initShare({
+      title: 'foo2',
+      desc: 'bar2',
+      imgUrl: 'http://via.placeholder.com/350x350',
+      link: 'https://github.com/ZhaZhengRefn/wechat-share-manager',  
+    })
   </script>
 </body>
 </html>

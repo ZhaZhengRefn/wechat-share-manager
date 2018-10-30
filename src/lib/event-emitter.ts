@@ -1,6 +1,6 @@
 type Args = any[];
 type Func = () => any;
-interface InterfaceEvent {
+export interface InterfaceEvent {
   on(type: string, fn: Func): void;
   emit(type: string, ...args: Args): void;
 }
@@ -31,20 +31,18 @@ export default class Event implements InterfaceEvent {
       delete this.stack[type];
     }
     // 订阅事件
-    let events: Func[] = this.events[type];
-    if (!Array.isArray(events)) {
-      events = [];
+    if (!Array.isArray(this.events[type])) {
+      this.events[type] = [];
     }
-    events.push(fn);
+    (this.events[type] as Func[]).push(fn);
   }
 
   public emit(type: string, ...args: Args): void {
     if (!Array.isArray(this.events[type])) {
-      let stack: Args[] = this.stack[type];
       if (!Array.isArray(this.stack[type])) {
-        stack = [];
+        this.stack[type] = [];
       }
-      stack.push(args);
+      (this.stack[type] as Args[]).push(args);
       return;
     }
     // 触发事件回调
