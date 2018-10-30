@@ -1,3 +1,8 @@
+declare global {
+  interface Window {
+    wx: InterfaceWechat;
+  }
+}
 import Event from './lib/event-emitter';
 
 type Warning = (msg: string) => void;
@@ -74,7 +79,7 @@ export default class Share implements InterfaceShare {
     this.router = router;
     this.uid = 0;
     this.isDebug = options.isDebug || false;
-    this.wx = wx;
+    this.wx = wx || window.wx;
 
     // 挂载全局方法$initShare，传入自定义分享配置 或 回调函数
     // 用于在每页初始化默认分享后再覆盖自定义分享
